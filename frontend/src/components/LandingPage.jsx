@@ -45,16 +45,25 @@ const LandingPage = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Background Pattern */}
+      <div className="fixed inset-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 via-purple-100/20 to-indigo-100/20"></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%), 
+                           radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 20%, rgba(255, 219, 98, 0.1) 0%, transparent 50%)`
+        }}></div>
+      </div>
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-xl z-50 border-b border-white/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl">
-                <Wallet className="w-6 h-6 text-white" />
+              <div className="p-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl shadow-lg shadow-violet-500/25">
+                <Wallet className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 ExpenseAI
               </span>
             </div>
@@ -109,11 +118,16 @@ const LandingPage = ({ onNavigate }) => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-full mb-8">
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-purple-700">Powered by Ollama AI</span>
+      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Hero Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50/50 via-transparent to-indigo-50/50"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-violet-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/80 backdrop-blur-sm border border-violet-200/50 rounded-full mb-8 shadow-sm">
+            <Sparkles className="w-4 h-4 text-violet-600" />
+            <span className="text-sm font-medium text-violet-700">Powered by Ollama AI</span>
           </div>
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -163,10 +177,15 @@ const LandingPage = ({ onNavigate }) => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="features" className="relative py-20 bg-gradient-to-br from-white via-violet-50/30 to-indigo-50/30">
+        {/* Features Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-100/20 via-transparent to-indigo-100/20"></div>
+        <div className="absolute top-10 right-20 w-64 h-64 bg-violet-200/15 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-10 left-20 w-80 h-80 bg-indigo-200/15 rounded-full blur-2xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-4">
               Everything You Need to Save Money
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -179,12 +198,12 @@ const LandingPage = ({ onNavigate }) => {
             {features.map((feature, idx) => (
               <div 
                 key={idx}
-                className="group p-8 bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                className="group p-8 bg-white/60 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-white/50 hover:scale-105 hover:bg-white/80"
               >
-                <div className="p-4 bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform">
-                  <feature.icon className="w-8 h-8 text-purple-600" />
+                <div className="p-4 bg-gradient-to-br from-violet-100/50 to-indigo-100/50 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <feature.icon className="w-8 h-8 text-violet-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-3">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
               </div>
             ))}
@@ -193,10 +212,15 @@ const LandingPage = ({ onNavigate }) => {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="how-it-works" className="relative py-20 bg-gradient-to-br from-indigo-50/50 via-white to-violet-50/50">
+        {/* How It Works Background */}
+        <div className="absolute inset-0 bg-gradient-to-l from-indigo-100/20 via-transparent to-violet-100/20"></div>
+        <div className="absolute top-10 left-10 w-72 h-72 bg-indigo-200/15 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 bg-violet-200/15 rounded-full blur-2xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-4">
               How It Works
             </h2>
             <p className="text-lg text-gray-600">
@@ -219,17 +243,22 @@ const LandingPage = ({ onNavigate }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-600 to-blue-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-20 bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 overflow-hidden">
+        {/* CTA Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-700/20 via-transparent to-indigo-700/20"></div>
+        <div className="absolute top-10 left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
             Ready to Start Saving?
           </h2>
-          <p className="text-xl text-purple-100 mb-10">
+          <p className="text-xl text-violet-100 mb-10">
             Join thousands of users who are already using AI to track expenses and save money.
           </p>
           <button 
             onClick={() => onNavigate('register')}
-            className="px-8 py-4 bg-white text-purple-600 rounded-full text-lg font-semibold hover:shadow-xl hover:scale-105 transition-all"
+            className="px-8 py-4 bg-white text-violet-600 rounded-full text-lg font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 hover:bg-violet-50"
           >
             Create Free Account
           </button>

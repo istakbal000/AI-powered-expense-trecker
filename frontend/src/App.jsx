@@ -3,16 +3,18 @@ import ExpenseForm from './components/ExpenseForm'
 import ExpenseList from './components/ExpenseList'
 import AIInsights from './components/AIInsights'
 import BudgetPlanner from './components/BudgetPlanner'
+import AccountSettings from './components/AccountSettings'
 import LandingPage from './components/LandingPage'
 import Login from './components/Login'
 import Register from './components/Register'
-import { Wallet, PieChart, TrendingUp, DollarSign, LogOut, User, Coins } from 'lucide-react'
+import { Wallet, PieChart, TrendingUp, DollarSign, LogOut, User, Coins, Settings } from 'lucide-react'
 
 function App() {
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [currentView, setCurrentView] = useState('landing') // landing, login, register, dashboard
+  const [currentView, setCurrentView] = useState('landing') // landing, login, register, dashboard, settings
+  const [dashboardView, setDashboardView] = useState('overview') // overview, settings
   const [user, setUser] = useState(null)
 
   // Check authentication on mount
@@ -213,29 +215,50 @@ function App() {
   const currencySymbol = currencySymbols[primaryCurrency] || '$'
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Background Pattern */}
+      <div className="fixed inset-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 via-purple-100/20 to-indigo-100/20"></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%), 
+                           radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 20%, rgba(255, 219, 98, 0.1) 0%, transparent 50%)`
+        }}></div>
+      </div>
+      
+      <header className="relative bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl">
-                <Wallet className="w-6 h-6 text-white" />
+              <div className="p-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl shadow-lg shadow-violet-500/25">
+                <Wallet className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                   AI Expense Tracker
                 </h1>
                 <p className="text-xs text-gray-500">Powered by Ollama Gemma3:1b</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-50 rounded-lg">
-                <Coins className="w-4 h-4 text-purple-600" />
-                <span className="text-sm font-medium text-purple-700">{primaryCurrency}</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-violet-50/80 backdrop-blur-sm border border-violet-200/50 rounded-lg">
+                <Coins className="w-4 h-4 text-violet-600" />
+                <span className="text-sm font-medium text-violet-700">{primaryCurrency}</span>
               </div>
               <button 
+                onClick={() => setDashboardView(dashboardView === 'settings' ? 'overview' : 'settings')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:shadow-sm ${
+                  dashboardView === 'settings' 
+                    ? 'bg-violet-100 text-violet-700' 
+                    : 'text-gray-600 hover:bg-white/50'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">Settings</span>
+              </button>
+              <button 
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Logout</span>
@@ -245,52 +268,52 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="relative max-w-7xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white/60 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-white/50 hover:bg-white/80">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-100 rounded-lg">
+              <div className="p-2.5 bg-gradient-to-br from-red-100/50 to-pink-100/50 rounded-xl shadow-sm">
                 <DollarSign className="w-5 h-5 text-red-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Total Spent</p>
-                <p className="text-xl font-bold text-gray-900">{currencySymbol}{totalSpent.toFixed(2)}</p>
+                <p className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{currencySymbol}{totalSpent.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white/60 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-white/50 hover:bg-white/80">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2.5 bg-gradient-to-br from-blue-100/50 to-indigo-100/50 rounded-xl shadow-sm">
                 <PieChart className="w-5 h-5 text-blue-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Categories</p>
-                <p className="text-xl font-bold text-gray-900">{Object.keys(categoryTotals).length}</p>
+                <p className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{Object.keys(categoryTotals).length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white/60 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-white/50 hover:bg-white/80">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2.5 bg-gradient-to-br from-green-100/50 to-emerald-100/50 rounded-xl shadow-sm">
                 <TrendingUp className="w-5 h-5 text-green-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Expenses</p>
-                <p className="text-xl font-bold text-gray-900">{expenses.length}</p>
+                <p className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{expenses.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white/60 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-white/50 hover:bg-white/80">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Wallet className="w-5 h-5 text-purple-600" />
+              <div className="p-2.5 bg-gradient-to-br from-violet-100/50 to-purple-100/50 rounded-xl shadow-sm">
+                <Wallet className="w-5 h-5 text-violet-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Top Category</p>
-                <p className="text-xl font-bold text-gray-900 truncate max-w-[120px]">
+                <p className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent truncate max-w-[120px]">
                   {topCategory ? topCategory[0] : '-'}
                 </p>
               </div>
@@ -298,22 +321,31 @@ function App() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-6">
-            <ExpenseForm onAddExpense={addExpense} />
-            <BudgetPlanner expenses={expenses} currencySymbol={currencySymbol} />
-          </div>
+        {dashboardView === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1 space-y-6">
+                <ExpenseForm onAddExpense={addExpense} />
+                <BudgetPlanner expenses={expenses} currencySymbol={currencySymbol} />
+              </div>
 
-          <div className="lg:col-span-2 space-y-6">
-            <AIInsights expenses={expenses} currencySymbol={currencySymbol} />
-            <ExpenseList 
-              expenses={expenses} 
-              onDelete={deleteExpense}
-              onEdit={editExpense}
-              onAnalyze={analyzeExpense}
-            />
-          </div>
-        </div>
+              <div className="lg:col-span-2 space-y-6">
+                <AIInsights expenses={expenses} currencySymbol={currencySymbol} />
+                <ExpenseList 
+                  expenses={expenses} 
+                  onDelete={deleteExpense}
+                  onEdit={editExpense}
+                  onAnalyze={analyzeExpense}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <AccountSettings 
+            user={user} 
+            onUpdate={(updatedUser) => setUser(updatedUser)} 
+          />
+        )}
       </main>
     </div>
   )

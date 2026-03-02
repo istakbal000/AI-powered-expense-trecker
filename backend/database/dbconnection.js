@@ -1,7 +1,8 @@
 const mongoose =require('mongoose');
 const dbconnection=async()=>{
     try{
-        await mongoose.connect('mongodb://localhost:27017/expensetracker');
+        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://Istakbal:<db_password>@cluster0.8qevpcz.mongodb.net/?appName=Cluster0';
+        await mongoose.connect(mongoURI);
         console.log('Database connected successfully');
     }
     catch(error){
