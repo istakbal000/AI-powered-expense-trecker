@@ -1,13 +1,6 @@
 const user = require('../database/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { OAuth2Client } = require('google-auth-library');
-
-// Initialize Google OAuth client
-const googleClient = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET
-);
 
 // Input validation helper
 const validateEmail = (email) => {
@@ -78,15 +71,9 @@ const registerUser = async (req, res) => {
             name: name.trim(),
             email: email.toLowerCase().trim(),
             password: hashedPassword,
-            authMethod: 'local',
             profile: {
                 currency: 'USD',
                 timezone: 'UTC'
-            },
-            preferences: {
-                budgetAlerts: true,
-                weeklyReports: true,
-                aiInsights: true
             }
         });
 
@@ -96,8 +83,7 @@ const registerUser = async (req, res) => {
             user: {
                 id: newUser._id,
                 name: newUser.name,
-                email: newUser.email,
-                authMethod: newUser.authMethod
+                email: newUser.email
             }
         }, 201);
 
@@ -130,11 +116,6 @@ const loginUser = async (req, res) => {
             return errorResponse(res, 'Invalid email or password', 401);
         }
 
-        // For Google users, don't allow password login
-        if (existingUser.authMethod === 'google' && !existingUser.password) {
-            return errorResponse(res, 'Please use Google Sign-In to access your account', 401);
-        }
-
         // Verify password
         const isMatch = await bcrypt.compare(password, existingUser.password);
 
@@ -146,8 +127,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             { 
                 id: existingUser._id,
-                email: existingUser.email,
-                authMethod: existingUser.authMethod 
+                email: existingUser.email 
             },
             process.env.SECRET_JWT,
             { 
@@ -172,9 +152,12 @@ const loginUser = async (req, res) => {
                 id: existingUser._id,
                 name: existingUser.name,
                 email: existingUser.email,
-                authMethod: existingUser.authMethod,
                 profile: existingUser.profile,
-                preferences: existingUser.preferences
+                preferences: existingUser.preferences || {
+                    budgetAlerts: true,
+                    weeklyReports: true,
+                    aiInsights: true
+                }
             },
             token: process.env.NODE_ENV === 'development' ? token : undefined // Only send token in dev
         });
@@ -199,106 +182,6 @@ const logoutUser = async (req, res) => {
     } catch (error) {
         console.error('Logout error:', error);
         errorResponse(res, 'Logout failed', 500);
-    }
-};
-
-// Enhanced Google OAuth with proper token handling
-const googleAuth = async (req, res) => {
-    try {
-        const { code } = req.body;
-
-        if (!code) {
-            return errorResponse(res, 'Authorization code is required', 400);
-        }
-
-        // Exchange authorization code for tokens
-        const { tokens } = await googleClient.getToken(code);
-
-        // Verify ID token and get user info
-        const ticket = await googleClient.verifyIdToken({
-            idToken: tokens.id_token,
-            audience: process.env.GOOGLE_CLIENT_ID
-        });
-
-        const payload = ticket.getPayload();
-
-        // Check if user exists
-        let existingUser = await user.findOne({ email: payload.email });
-
-        if (existingUser) {
-            // User exists, update Google info if needed
-            if (existingUser.authMethod !== 'google') {
-                return errorResponse(res, 'Email already registered with password. Please login with password first.', 400);
-            }
-
-            if (!existingUser.googleId) {
-                existingUser.googleId = payload.sub;
-                existingUser.avatar = payload.picture;
-                await existingUser.save();
-            }
-        } else {
-            // Create new user with Google auth
-            const newUser = new user({
-                name: payload.name,
-                email: payload.email,
-                googleId: payload.sub,
-                authMethod: 'google',
-                avatar: payload.picture,
-                profile: {
-                    currency: 'USD',
-                    timezone: 'UTC'
-                },
-                preferences: {
-                    budgetAlerts: true,
-                    weeklyReports: true,
-                    aiInsights: true
-                }
-            });
-
-            await newUser.save();
-            existingUser = newUser;
-        }
-
-        // Generate JWT for Google user
-        const token = jwt.sign(
-            { 
-                id: existingUser._id,
-                email: existingUser.email,
-                authMethod: 'google' 
-            },
-            process.env.SECRET_JWT,
-            { 
-                expiresIn: '24h',
-                issuer: 'expense-tracker',
-                audience: 'expense-tracker-users'
-            }
-        );
-
-        // Set secure cookie
-        const cookieOptions = {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 24 * 60 * 60 * 1000 // 24 hours
-        };
-
-        res.cookie('token', token, cookieOptions);
-
-        successResponse(res, 'Google authentication successful', {
-            user: {
-                id: existingUser._id,
-                name: existingUser.name,
-                email: existingUser.email,
-                authMethod: existingUser.authMethod,
-                avatar: existingUser.avatar,
-                profile: existingUser.profile,
-                preferences: existingUser.preferences
-            }
-        });
-
-    } catch (error) {
-        console.error('Google auth error:', error);
-        errorResponse(res, 'Google authentication failed. Please try again.', 500);
     }
 };
 
@@ -381,11 +264,6 @@ const updatePassword = async (req, res) => {
             return errorResponse(res, 'User not found', 404);
         }
 
-        // Google users cannot change password
-        if (existingUser.authMethod === 'google') {
-            return errorResponse(res, 'Password change not available for Google accounts', 400);
-        }
-
         // Verify current password
         const isMatch = await bcrypt.compare(currentPassword, existingUser.password);
         if (!isMatch) {
@@ -410,7 +288,6 @@ module.exports = {
     registerUser,
     loginUser,
     logoutUser,
-    googleAuth,
     updateProfile,
     updatePassword
 };

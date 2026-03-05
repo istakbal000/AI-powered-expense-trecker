@@ -11,23 +11,7 @@ const userschema=new mongoose.Schema({
     },
     password:{
         type:String,
-        required: function() {
-            // Password is required only for non-Google users
-            return !this.googleId;
-        }
-    },
-    googleId:{
-        type:String,
-        unique:true,
-        sparse:true // Allows multiple null values
-    },
-    authMethod:{
-        type:String,
-        enum: ['local', 'google'],
-        default: 'local'
-    },
-    avatar:{
-        type:String
+        required:true
     },
     profile:{
         currency:{
@@ -37,6 +21,20 @@ const userschema=new mongoose.Schema({
         timezone:{
             type:String,
             default: 'UTC'
+        }
+    },
+    preferences:{
+        budgetAlerts:{
+            type:Boolean,
+            default: true
+        },
+        weeklyReports:{
+            type:Boolean,
+            default: true
+        },
+        aiInsights:{
+            type:Boolean,
+            default: true
         }
     }
 }, {

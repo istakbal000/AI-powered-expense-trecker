@@ -23,7 +23,7 @@ const LandingPage = ({ onNavigate }) => {
     {
       icon: Shield,
       title: 'Secure & Private',
-      description: 'Your data stays on your device with Ollama. No cloud processing, complete privacy.'
+      description: 'Your data is protected with JWT authentication and secure password hashing.'
     },
     {
       icon: DollarSign,

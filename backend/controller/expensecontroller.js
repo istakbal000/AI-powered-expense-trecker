@@ -2,22 +2,47 @@ const expence = require('../database/expence.js');
 
 const expenseadd = async (req, res) => {
     try {
+        console.log('Adding expense - User:', req.user);
+        console.log('Request body:', req.body);
+        
         const { description, amount, category, currency } = req.body;
+        
         if (!description || !amount || !category) {
-            return res.status(400).json({ error: "All fields are required" });
+            return res.status(400).json({ 
+                success: false,
+                error: "All fields are required" 
+            });
         }
+        
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ 
+                success: false,
+                error: "User not authenticated" 
+            });
+        }
+        
         const newExpense = new expence({
             description,
-            amount,
+            amount: parseFloat(amount),
             category,
             currency: currency || 'USD',
             userid: req.user.id
         });
+        
         await newExpense.save();
-        res.status(201).json({ message: "Expense added successfully", expense: newExpense });
+        
+        res.status(201).json({ 
+            success: true,
+            message: "Expense added successfully", 
+            expense: newExpense 
+        });
     }
     catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Error adding expense:', err);
+        res.status(500).json({ 
+            success: false,
+            error: err.message 
+        });
     }
 }
 

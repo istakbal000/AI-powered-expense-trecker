@@ -33,9 +33,9 @@ const AccountSettings = ({ user, onUpdate }) => {
         email: user.email || '',
         currency: user.profile?.currency || 'USD',
         timezone: user.profile?.timezone || 'UTC',
-        notifications: user.preferences?.budgetAlerts !== false,
-        weeklyReports: user.preferences?.weeklyReports !== false,
-        aiInsights: user.preferences?.aiInsights !== false
+        notifications: true,
+        weeklyReports: true,
+        aiInsights: true
       });
     }
   }, [user]);
@@ -303,103 +303,101 @@ const AccountSettings = ({ user, onUpdate }) => {
         </div>
       </div>
 
-      {/* Password Settings (only for non-Google users) */}
-      {user?.authMethod !== 'google' && (
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-sm border border-white/50 p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-gradient-to-br from-green-100/50 to-emerald-100/50 rounded-xl">
-              <Lock className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                Change Password
-              </h3>
-              <p className="text-sm text-gray-500">Update your account password</p>
+      {/* Password Settings */}
+      <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-sm border border-white/50 p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2.5 bg-gradient-to-br from-green-100/50 to-emerald-100/50 rounded-xl">
+            <Lock className="w-5 h-5 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              Change Password
+            </h3>
+            <p className="text-sm text-gray-500">Update your account password</p>
+          </div>
+        </div>
+
+        <form onSubmit={handlePasswordUpdate} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+            <div className="relative">
+              <input
+                type={showPasswords.current ? 'text' : 'password'}
+                value={passwordData.currentPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
           </div>
 
-          <form onSubmit={handlePasswordUpdate} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
-              <div className="relative">
-                <input
-                  type={showPasswords.current ? 'text' : 'password'}
-                  value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+            <div className="relative">
+              <input
+                type={showPasswords.new ? 'text' : 'password'}
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
+                required
+                minLength={6}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
-              <div className="relative">
-                <input
-                  type={showPasswords.new ? 'text' : 'password'}
-                  value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
-                  required
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+            <div className="relative">
+              <input
+                type={showPasswords.confirm ? 'text' : 'password'}
+                value={passwordData.confirmPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
-              <div className="relative">
-                <input
-                  type={showPasswords.confirm ? 'text' : 'password'}
-                  value={passwordData.confirmPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-white/50 pr-12"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={passwordLoading}
-              className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-semibold hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 flex items-center gap-2"
-            >
-              {passwordLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Updating Password...
-                </>
-              ) : (
-                <>
-                  <Shield className="w-5 h-5" />
-                  Update Password
-                </>
-              )}
-            </button>
-          </form>
-        </div>
-      )}
+          <button
+            type="submit"
+            disabled={passwordLoading}
+            className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-semibold hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 flex items-center gap-2"
+          >
+            {passwordLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Updating Password...
+              </>
+            ) : (
+              <>
+                <Shield className="w-5 h-5" />
+                Update Password
+              </>
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
