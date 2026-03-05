@@ -83,23 +83,39 @@ function App() {
 
   const addExpense = async (expenseData) => {
     try {
+      console.log('=== ADDING EXPENSE ===');
+      console.log('Expense data:', expenseData);
+      
       const response = await fetch('http://localhost:8000/api/v1/expence/addexpence', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(expenseData)
-      })
+      });
+      
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+      
       if (response.ok) {
-        fetchExpenses()
-        return true
-      } else if (response.status === 401) {
-        setIsAuthenticated(false)
-        setCurrentView('login')
+        console.log('Expense added successfully!');
+        fetchExpenses();
+        return true;
+      } else {
+        console.error('Failed to add expense:', responseData);
+        if (response.status === 401) {
+          console.log('Unauthorized - redirecting to login');
+          setIsAuthenticated(false);
+          setCurrentView('login');
+        }
       }
     } catch (err) {
-      console.error('Failed to add expense:', err)
+      console.error('=== EXPENSE ADDITION ERROR ===');
+      console.error('Error details:', err);
     }
-    return false
+    return false;
   }
 
   const deleteExpense = async (id) => {

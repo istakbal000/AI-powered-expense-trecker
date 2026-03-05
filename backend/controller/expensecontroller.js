@@ -2,12 +2,16 @@ const expence = require('../database/expence.js');
 
 const expenseadd = async (req, res) => {
     try {
-        console.log('Adding expense - User:', req.user);
+        console.log('=== EXPENSE ADDITION STARTED ===');
+        console.log('User from auth middleware:', req.user);
+        console.log('Request headers:', req.headers);
+        console.log('Request cookies:', req.cookies);
         console.log('Request body:', req.body);
         
         const { description, amount, category, currency } = req.body;
         
         if (!description || !amount || !category) {
+            console.log('Validation failed: Missing fields');
             return res.status(400).json({ 
                 success: false,
                 error: "All fields are required" 
@@ -15,12 +19,14 @@ const expenseadd = async (req, res) => {
         }
         
         if (!req.user || !req.user.id) {
+            console.log('Authentication failed: No user ID');
             return res.status(401).json({ 
                 success: false,
                 error: "User not authenticated" 
             });
         }
         
+        console.log('Creating expense with userid:', req.user.id);
         const newExpense = new expence({
             description,
             amount: parseFloat(amount),
@@ -29,7 +35,9 @@ const expenseadd = async (req, res) => {
             userid: req.user.id
         });
         
+        console.log('Saving expense...');
         await newExpense.save();
+        console.log('Expense saved successfully:', newExpense);
         
         res.status(201).json({ 
             success: true,
@@ -38,7 +46,8 @@ const expenseadd = async (req, res) => {
         });
     }
     catch (err) {
-        console.error('Error adding expense:', err);
+        console.error('=== EXPENSE ADDITION FAILED ===');
+        console.error('Error details:', err);
         res.status(500).json({ 
             success: false,
             error: err.message 

@@ -137,15 +137,18 @@ const loginUser = async (req, res) => {
             }
         );
 
-        // Set secure cookie
+        // Set secure cookie - relaxed settings for development
         const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+            sameSite: 'lax',  // Changed from 'strict' for better dev compatibility
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            path: '/'  // Explicitly set path
         };
 
+        console.log('Setting cookie for user:', existingUser._id);
         res.cookie('token', token, cookieOptions);
+        console.log('Cookie set successfully');
 
         successResponse(res, 'Login successful', {
             user: {
