@@ -14,7 +14,7 @@ const BudgetPlanner = ({ expenses, currencySymbol = '$' }) => {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/ai/budget-suggestions', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/ai/budget-suggestions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

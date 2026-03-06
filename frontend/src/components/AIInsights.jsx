@@ -16,7 +16,7 @@ const AIInsights = ({ expenses, currencySymbol = '$', onInsightsReceived }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/ai/insights', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/ai/insights', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

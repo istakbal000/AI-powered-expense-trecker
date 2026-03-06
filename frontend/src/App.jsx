@@ -31,7 +31,7 @@ function App() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/expence/getallexpence', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/getallexpence', {
         credentials: 'include'
       })
       if (response.ok) {
@@ -52,7 +52,7 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:8000/api/v1/user/logout', {
+      await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/logout', {
         method: 'POST',
         credentials: 'include'
       })
@@ -66,7 +66,7 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/expence/getallexpence', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/getallexpence', {
         credentials: 'include'
       })
       if (response.ok) {
@@ -86,7 +86,7 @@ function App() {
       console.log('=== ADDING EXPENSE ===');
       console.log('Expense data:', expenseData);
       
-      const response = await fetch('http://localhost:8000/api/v1/expence/addexpence', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/addexpence', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -120,7 +120,7 @@ function App() {
 
   const deleteExpense = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/expence/deleteexpence/${id}`, {
+      const response = await fetch(`https://ai-powered-expense-trecker.onrender.com/api/v1/expense/deleteexpence/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       })
@@ -158,7 +158,7 @@ function App() {
     
     if (newDesc && newAmount) {
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/expence/updateexpence/${expense._id}`, {
+        const response = await fetch(`https://ai-powered-expense-trecker.onrender.com/api/v1/expense/updateexpence/${expense._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -183,7 +183,7 @@ function App() {
 
   const analyzeExpense = async (expense) => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/ai/analyze-expense', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/ai/analyze-expense', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

@@ -25,7 +25,7 @@ const Register = ({ onNavigate, onLogin }) => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/user/register', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -41,7 +41,7 @@ const Register = ({ onNavigate, onLogin }) => {
       if (response.ok) {
         setSuccess(true);
         // Auto login after registration
-        const loginResponse = await fetch('http://localhost:8000/api/v1/user/login', {
+        const loginResponse = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

@@ -47,7 +47,7 @@ const AccountSettings = ({ user, onUpdate }) => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/user/update-profile', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/update-profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -88,7 +88,7 @@ const AccountSettings = ({ user, onUpdate }) => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/user/update-password', {
+      const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/update-password', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
