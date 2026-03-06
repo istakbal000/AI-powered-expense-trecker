@@ -11,10 +11,14 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // CORS configuration
+// Configure CORS origins. In production, set `ALLOWED_ORIGINS` env var as a comma-separated list.
+const defaultLocalOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['https://ai-powered-expense-trecker.onrender.com'])
+    : defaultLocalOrigins;
+
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://yourdomain.com', 'https://www.yourdomain.com']
-        : ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
