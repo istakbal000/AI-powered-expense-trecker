@@ -97,13 +97,23 @@ const markasdoneorundone = async (req, res) => {
 const deleteexpence = async (req, res) => {
     try {
         const expenseId = req.params.id;
+        console.log('Attempting delete for expenseId:', expenseId, 'by user:', req.user && req.user.id);
         const expense = await expence.findById(expenseId);
         if (!expense) {
+            console.log('Expense not found:', expenseId);
             return res.status(404).json({ message: "Expense not found" });
         }
-        await expense.remove();
+        // Ensure the authenticated user owns this expense
+        if (expense.userid.toString() !== req.user.id) {
+            console.log('Unauthorized delete attempt. Owner:', expense.userid.toString(), 'Requester:', req.user.id);
+            return res.status(403).json({ error: "Not authorized" });
+        }
+        await expence.findByIdAndDelete(expenseId);
+        console.log('Expense deleted successfully:', expenseId);
         res.status(200).json({ message: "Expense deleted successfully" });
     } catch (err) {
+        console.error('=== DELETE EXPENSE FAILED ===');
+        console.error('Error details:', err);
         res.status(500).json({ error: err.message });
     }
 };

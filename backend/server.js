@@ -49,10 +49,26 @@ app.get('/health', (req, res) => {
     });
 });
 
-// API Routes
-app.use('/api/v1/user', require('./routes/userroute'));
-app.use('/api/v1/expense', require('./routes/expenceroute'));
-app.use('/api/v1/ai', require('./routes/airoute'));
+// Test route to verify routing works
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'API routing works!', path: req.path });
+});
+
+// API Routes - Add logging to verify they're loaded
+console.log('Loading routes...');
+const userRoutes = require('./routes/userroute');
+console.log('User routes loaded');
+const expenseRoutes = require('./routes/expenceroute');
+console.log('Expense routes loaded');
+const aiRoutes = require('./routes/airoute');
+console.log('AI routes loaded');
+
+app.use('/api/v1/user', userRoutes);
+console.log('User routes mounted at /api/v1/user');
+app.use('/api/v1/expense', expenseRoutes);
+console.log('Expense routes mounted at /api/v1/expense');
+app.use('/api/v1/ai', aiRoutes);
+console.log('AI routes mounted at /api/v1/ai');
 
 // 404 handler
 app.use('*', (req, res) => {
