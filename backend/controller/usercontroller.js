@@ -141,7 +141,7 @@ const loginUser = async (req, res) => {
         const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',  // Changed from 'strict' for better dev compatibility
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Use 'None' in production for cross-site cookies
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
             path: '/'  // Explicitly set path
         };
@@ -177,7 +177,8 @@ const logoutUser = async (req, res) => {
         res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/'
         });
 
         successResponse(res, 'Logged out successfully');
