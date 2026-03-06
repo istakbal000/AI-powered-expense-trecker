@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8000;
 // Configure CORS origins. In production, set `ALLOWED_ORIGINS` env var as a comma-separated list.
 const defaultLocalOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'];
 const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['https://ai-powered-expense-trecker.onrender.com'])
+    ? (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['https://ai-powered-expense-trecker.onrender.com', 'https://ai-powered-expense-trecker-1.onrender.com'])
     : defaultLocalOrigins;
 
 const corsOptions = {
