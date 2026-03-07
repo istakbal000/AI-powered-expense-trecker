@@ -150,6 +150,7 @@ const loginUser = async (req, res) => {
         res.cookie('token', token, cookieOptions);
         console.log('Cookie set successfully');
 
+        // Return token in response so frontend can use Authorization header flow
         successResponse(res, 'Login successful', {
             user: {
                 id: existingUser._id,
@@ -162,7 +163,7 @@ const loginUser = async (req, res) => {
                     aiInsights: true
                 }
             },
-            token: process.env.NODE_ENV === 'development' ? token : undefined // Only send token in dev
+            token
         });
 
     } catch (error) {

@@ -23,6 +23,10 @@ const Login = ({ onNavigate, onLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
+        // Save token (if provided) for Authorization header flow
+        if (data && data.data && data.data.token) {
+          localStorage.setItem('token', data.data.token);
+        }
         onLogin();
       } else {
         setError(data.error || 'Login failed');

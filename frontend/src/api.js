@@ -7,6 +7,20 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Add request interceptor to include Authorization header when token exists
+api.interceptors.request.use((config) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+  } catch (e) {
+    // ignore
+  }
+  return config;
+});
+
 // User APIs
 export const registerUser = (data) => api.post('/user/register', data);
 export const loginUser = (data) => api.post('/user/login', data);

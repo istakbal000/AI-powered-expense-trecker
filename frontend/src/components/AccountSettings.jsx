@@ -49,7 +49,7 @@ const AccountSettings = ({ user, onUpdate }) => {
     try {
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/update-profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {}) },
         credentials: 'include',
         body: JSON.stringify(formData)
       });
@@ -90,7 +90,7 @@ const AccountSettings = ({ user, onUpdate }) => {
     try {
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/update-password', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {}) },
         credentials: 'include',
         body: JSON.stringify({
           currentPassword: passwordData.currentPassword,

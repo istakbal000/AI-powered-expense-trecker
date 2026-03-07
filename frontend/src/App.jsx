@@ -32,7 +32,10 @@ function App() {
   const checkAuth = async () => {
     try {
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/getallexpence', {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {})
+        }
       })
       if (response.ok) {
         setIsAuthenticated(true)
@@ -54,11 +57,15 @@ function App() {
     try {
       await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/user/logout', {
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {})
+        }
       })
     } catch (err) {
       console.error('Logout error:', err)
     }
+    localStorage.removeItem('token')
     setIsAuthenticated(false)
     setExpenses([])
     setCurrentView('landing')
@@ -67,7 +74,10 @@ function App() {
   const fetchExpenses = async () => {
     try {
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/getallexpence', {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {})
+        }
       })
       if (response.ok) {
         const data = await response.json()
@@ -88,7 +98,7 @@ function App() {
       
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/expense/addexpence', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {}) },
         credentials: 'include',
         body: JSON.stringify(expenseData)
       });
@@ -122,7 +132,10 @@ function App() {
     try {
       const response = await fetch(`https://ai-powered-expense-trecker.onrender.com/api/v1/expense/deleteexpence/${id}`, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {})
+        }
       })
       if (response.ok) {
         fetchExpenses()
@@ -160,7 +173,7 @@ function App() {
       try {
         const response = await fetch(`https://ai-powered-expense-trecker.onrender.com/api/v1/expense/updateexpence/${expense._id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {}) },
           credentials: 'include',
           body: JSON.stringify({
             description: newDesc,
@@ -185,7 +198,7 @@ function App() {
     try {
       const response = await fetch('https://ai-powered-expense-trecker.onrender.com/api/v1/ai/analyze-expense', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {}) },
         credentials: 'include',
         body: JSON.stringify(expense)
       })

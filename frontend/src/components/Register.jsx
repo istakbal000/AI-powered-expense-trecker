@@ -52,6 +52,10 @@ const Register = ({ onNavigate, onLogin }) => {
         });
 
         if (loginResponse.ok) {
+          const loginData = await loginResponse.json();
+          if (loginData && loginData.data && loginData.data.token) {
+            localStorage.setItem('token', loginData.data.token);
+          }
           setTimeout(() => onLogin(), 1500);
         }
       } else {

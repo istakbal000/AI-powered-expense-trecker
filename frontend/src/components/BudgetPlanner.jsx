@@ -18,6 +18,7 @@ const BudgetPlanner = ({ expenses, currencySymbol = '$' }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+            ...(localStorage.getItem('token') ? { Authorization: `Bearer ${localStorage.getItem('token')}` } : {})
         },
         credentials: 'include',
         body: JSON.stringify({
