@@ -6,6 +6,10 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
+// Log configured Ollama URL for debugging in deployments
+const configuredOllama = process.env.OLLAMA_URL || 'http://localhost:11434';
+console.log(`Configured OLLAMA_URL: ${configuredOllama}`);
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 8000;
