@@ -144,7 +144,7 @@ const Login = ({ onNavigate, onLogin }) => {
         {/* Powered By */}
         <div className="flex items-center justify-center gap-2 mt-6 text-gray-500 text-sm">
           <Sparkles className="w-4 h-4" />
-          <span>Powered by Ollama Gemma3:1b</span>
+          <span>Powered by Google Gemini</span>
         </div>
       </div>
     </div>

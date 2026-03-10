@@ -40,8 +40,8 @@ A full-stack MERN application that leverages AI to provide personalized expense 
 - **bcryptjs** - Password hashing
 
 ### AI Integration
-- **Ollama** - Local AI model hosting
-- **Gemma3:1b** - Lightweight AI model for insights
+- **Google Gemini** - Cloud AI model for insights
+- **gemini-2.5-flash** - Fast model for insights
 - **Custom prompts** - Personalized financial advice
 
 ## 🚀 Getting Started
@@ -49,7 +49,7 @@ A full-stack MERN application that leverages AI to provide personalized expense 
 ### Prerequisites
 - Node.js (v16 or higher)
 - MongoDB (local or Atlas)
-- Ollama with Gemma3:1b model
+- Google Gemini API Key
 
 ### Installation
 
@@ -59,14 +59,9 @@ A full-stack MERN application that leverages AI to provide personalized expense 
    cd AI-powered-expense-trecker
    ```
 
-2. **Install Ollama and Gemma3:1b**
-   ```bash
-   # Install Ollama
-   curl -fsSL https://ollama.ai/install.sh | sh
-   
-   # Pull Gemma3:1b model
-   ollama pull gemma3:1b
-   ```
+2. **Get Google Gemini API Key**
+   - Go to Google AI Studio
+   - Create a new API key
 
 3. **Backend Setup**
    ```bash
@@ -95,8 +90,8 @@ MONGODB_URI=mongodb://localhost:27017/expense-tracker
 # JWT
 SECRET_JWT=your-super-secret-jwt-key
 
-# Ollama
-OLLAMA_URL=http://localhost:11434
+# Gemini
+GEMINI_API_KEY=your_gemini_api_key_here
 
 # Server
 PORT=8000
@@ -257,9 +252,8 @@ cd backend
 
 ### Common Issues
 
-1. **Ollama Connection Error**
-   - Ensure Ollama is running: `ollama serve`
-   - Check if Gemma3:1b is installed: `ollama list`
+1. **Gemini Connection Error**
+   - Ensure you have a valid Gemini API Key and it is set in the `.env` file.
 
 2. **MongoDB Connection Error**
    - Verify MongoDB is running
@@ -270,8 +264,8 @@ cd backend
    - Check CORS configuration in server.js
 
 4. **AI Not Responding**
-   - Restart Ollama service
-   - Verify model is pulled correctly
+   - Verify your internet connection
+   - Check if Gemini API service is up
 
 ## 📄 License
 
@@ -283,7 +277,7 @@ Created with ❤️ by [Istakbal](https://github.com/istakbal000)
 
 ## 🙏 Acknowledgments
 
-- Ollama team for the amazing AI platform
+- Google for the amazing Gemini API platform
 - React and Node.js communities
 - Tailwind CSS for the beautiful design system
 

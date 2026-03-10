@@ -127,7 +127,7 @@ const LandingPage = ({ onNavigate }) => {
         <div className="relative max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/80 backdrop-blur-sm border border-violet-200/50 rounded-full mb-8 shadow-sm">
             <Sparkles className="w-4 h-4 text-violet-600" />
-            <span className="text-sm font-medium text-violet-700">Powered by Ollama AI</span>
+            <span className="text-sm font-medium text-violet-700">Powered by Gemini AI</span>
           </div>
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -139,7 +139,7 @@ const LandingPage = ({ onNavigate }) => {
           
           <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
             Smart expense tracking that learns your spending habits and provides personalized 
-            recommendations to help you save more money. Private, secure, and powered by local AI.
+            recommendations to help you save more money. Private, secure, and powered by Gemini.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -268,7 +268,7 @@ const LandingPage = ({ onNavigate }) => {
       {/* Footer */}
       <footer className="py-8 bg-gray-900 text-gray-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>© 2026 ExpenseAI. Powered by Ollama Gemma3:1b. All rights reserved.</p>
+          <p>© 2026 ExpenseAI. Powered by Google Gemini. All rights reserved.</p>
         </div>
       </footer>
     </div>

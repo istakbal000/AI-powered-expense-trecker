@@ -35,7 +35,7 @@ const AIInsights = ({ expenses, currencySymbol = '$', onInsightsReceived }) => {
         setError(data.error || 'Failed to get insights');
       }
     } catch (err) {
-      setError('Make sure Ollama is running locally!');
+      setError('Error connecting to AI service. Please try again later.');
     } finally {
       setLoading(false);
     }

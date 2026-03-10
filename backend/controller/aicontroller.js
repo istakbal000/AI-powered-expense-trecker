@@ -1,12 +1,8 @@
-const { Ollama } = require('ollama');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-const ollama = new Ollama({ host: process.env.OLLAMA_URL || 'http://localhost:11434' });
-
-const formatOllamaResponse = (resp) => {
-    if (!resp) return '';
-    if (typeof resp === 'string') return resp;
-    return resp.response || resp.output || resp.text || JSON.stringify(resp);
-};
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 const getAIInsights = async (req, res) => {
     try {
@@ -51,21 +47,19 @@ Please provide personalized advice:
 
 Use "you" and "your" to make it personal. Be specific and actionable based on their actual spending data.`;
 
-        let response;
+        let result;
         try {
-            response = await ollama.generate({
-                model: process.env.OLLAMA_MODEL || 'gemma3:1b',
-                prompt: prompt,
-                stream: false
-            });
+            if (!process.env.GEMINI_API_KEY) {
+                return res.status(500).json({ error: 'Gemini API Key is missing. Please set GEMINI_API_KEY in your .env file.' });
+            }
+            result = await model.generateContent(prompt);
         } catch (innerErr) {
-            console.error('Ollama connection error (insights):', innerErr && innerErr.message ? innerErr.message : innerErr);
-            const isConnErr = innerErr && (innerErr.code === 'ECONNREFUSED' || /connect|ECONNREFUSED|ETIMEDOUT|ENOTFOUND/i.test(innerErr.message || ''));
-            return res.status(isConnErr ? 502 : 500).json({ error: isConnErr ? 'Ollama service unavailable' : 'Failed to generate insights', details: innerErr && innerErr.message });
+            console.error('Gemini connection error (insights):', innerErr && innerErr.message ? innerErr.message : innerErr);
+            return res.status(502).json({ error: 'Gemini service unavailable', details: innerErr && innerErr.message });
         }
 
         res.status(200).json({
-            insights: formatOllamaResponse(response),
+            insights: result.response.text(),
             totalSpent,
             categoryBreakdown,
             expenseCount: expenses.length
@@ -117,21 +111,19 @@ Create a personalized plan for THIS USER:
 
 Speak directly to "you" and reference their actual spending. Make it feel personal and achievable.`;
 
-        let response;
+        let result;
         try {
-            response = await ollama.generate({
-                model: process.env.OLLAMA_MODEL || 'gemma3:1b',
-                prompt: prompt,
-                stream: false
-            });
+            if (!process.env.GEMINI_API_KEY) {
+                return res.status(500).json({ error: 'Gemini API Key is missing. Please set GEMINI_API_KEY in your .env file.' });
+            }
+            result = await model.generateContent(prompt);
         } catch (innerErr) {
-            console.error('Ollama connection error (budget):', innerErr && innerErr.message ? innerErr.message : innerErr);
-            const isConnErr = innerErr && (innerErr.code === 'ECONNREFUSED' || /connect|ECONNREFUSED|ETIMEDOUT|ENOTFOUND/i.test(innerErr.message || ''));
-            return res.status(isConnErr ? 502 : 500).json({ error: isConnErr ? 'Ollama service unavailable' : 'Failed to generate budget suggestions', details: innerErr && innerErr.message });
+            console.error('Gemini connection error (budget):', innerErr && innerErr.message ? innerErr.message : innerErr);
+            return res.status(502).json({ error: 'Gemini service unavailable', details: innerErr && innerErr.message });
         }
 
         res.status(200).json({
-            suggestions: formatOllamaResponse(response),
+            suggestions: result.response.text(),
             currentSpending: totalSpent,
             remainingBudget: monthlyIncome - totalSpent
         });
@@ -165,21 +157,19 @@ Provide personalized advice:
 
 Make it feel like you're talking directly to them about THEIR money. Be practical and specific.`;
 
-        let response;
+        let result;
         try {
-            response = await ollama.generate({
-                model: process.env.OLLAMA_MODEL || 'gemma3:1b',
-                prompt: prompt,
-                stream: false
-            });
+            if (!process.env.GEMINI_API_KEY) {
+                return res.status(500).json({ error: 'Gemini API Key is missing. Please set GEMINI_API_KEY in your .env file.' });
+            }
+            result = await model.generateContent(prompt);
         } catch (innerErr) {
-            console.error('Ollama connection error (analyze):', innerErr && innerErr.message ? innerErr.message : innerErr);
-            const isConnErr = innerErr && (innerErr.code === 'ECONNREFUSED' || /connect|ECONNREFUSED|ETIMEDOUT|ENOTFOUND/i.test(innerErr.message || ''));
-            return res.status(isConnErr ? 502 : 500).json({ error: isConnErr ? 'Ollama service unavailable' : 'Failed to analyze expense', details: innerErr && innerErr.message });
+            console.error('Gemini connection error (analyze):', innerErr && innerErr.message ? innerErr.message : innerErr);
+            return res.status(502).json({ error: 'Gemini service unavailable', details: innerErr && innerErr.message });
         }
 
         res.status(200).json({
-            analysis: formatOllamaResponse(response)
+            analysis: result.response.text()
         });
 
     } catch (err) {

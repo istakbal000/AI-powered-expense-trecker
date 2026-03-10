@@ -210,7 +210,7 @@ function App() {
         setCurrentView('login')
       }
     } catch (err) {
-      return 'Failed to analyze. Make sure Ollama is running!'
+      return 'Failed to analyze. Please check your AI connection!'
     }
   }
 
@@ -266,7 +266,7 @@ function App() {
                 <h1 className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                   AI Expense Tracker
                 </h1>
-                <p className="text-xs text-gray-500">Powered by Ollama Gemma3:1b</p>
+                <p className="text-xs text-gray-500">Powered by Google Gemini</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

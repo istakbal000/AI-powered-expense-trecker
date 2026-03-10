@@ -6,9 +6,9 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
-// Log configured Ollama URL for debugging in deployments
-const configuredOllama = process.env.OLLAMA_URL || 'http://localhost:11434';
-console.log(`Configured OLLAMA_URL: ${configuredOllama}`);
+// Log Gemini setup status
+const hasGeminiKey = !!process.env.GEMINI_API_KEY;
+console.log(`Gemini API Key configured: ${hasGeminiKey}`);
 
 // Initialize Express app
 const app = express();
@@ -57,10 +57,6 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Test route to verify routing works
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'API routing works!', path: req.path });
-});
 
 // API Routes - Add logging to verify they're loaded
 console.log('Loading routes...');
